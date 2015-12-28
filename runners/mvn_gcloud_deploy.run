@@ -1,0 +1,13 @@
+{
+    "info" : "Running mvn gcloud:deploy...",
+    "cmd" : [
+      "mvn",
+      "gcloud:deploy",
+      "-Dgcloud.gcloud_directory=/usr/local/share/google/google-cloud-sdk"
+    ],
+    "working_dir": "$project_path",
+    "env" : {
+      "JAVA_HOME": "/usr/lib/jvm/java-8-oracle"
+    },
+    "selector" : "source.java"
+}

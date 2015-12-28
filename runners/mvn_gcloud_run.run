@@ -1,0 +1,14 @@
+{
+    "info" : "Running mvn gcloud:run...",
+    "cmd" : [
+      "mvn",
+      "gcloud:run",
+      "-Dgcloud.host=$IP:$PORT",
+      "-Dgcloud.gcloud_directory=/usr/local/share/google/google-cloud-sdk"
+    ],
+    "working_dir": "$project_path",
+    "env" : {
+      "JAVA_HOME": "/usr/lib/jvm/java-8-oracle"
+    },
+    "selector" : "source.java"
+}

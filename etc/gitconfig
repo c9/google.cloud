@@ -1,0 +1,4 @@
+# bundled with c9/google.cloud
+
+[credential "https://source.developers.google.com"]
+    helper = c9-gcloud.sh

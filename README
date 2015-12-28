@@ -1,0 +1,42 @@
+Known Issues
+------------
+
+ - If the cloud repository is empty, `git` throws an error during initial
+   workspace cloning.
+ - `mvn gcloud:deploy -Dgcloud.set_default=true` seems to fail during first
+   deployment because of errors with the Datastore index
+ - Runners launched from the Google menu are missing the stop button and output
+   will get detached
+
+Features
+--------
+
+ - Cloud repository is initialized as Git remote on first launch, for the
+   correct project ID and module ID.
+ - Template can be pulled into project repository to start sample projects
+ - Default runners are pre-configured for building, running, and deploying to
+   App Engine.
+ - Ready for Google Cloud: Google Cloud SDK, Java 8, Maven, Git, Build tools
+ - Pre-installed Maven dependencies in `~/.m2` speed up `mvn gcloud:run` and
+   `mvn gcloud:deploy` commands.
+ - `git-credential` helper monitors `gcloud` credentials and blocks git
+   commands until configured
+ - Terminal output is monitored for URLs and a notification shown when local
+   run or deployment is detected
+ - Deep link to Developers Console through project menu
+
+Pending
+-------
+
+ - Include Amin's Java language tooling plugins to integrate Kythe
+ - Render Java package tree instead of directory/file tree
+ - Update menu buttons to `[Preview] [Build] [Deploy]`
+ - Add dialog for selecting from template projects
+ - Fix the extra `gcloud auth login` step currently required during first
+   launch. The C9 API key needs to be granted access to repo API scope.
+ - Consider using `scmurl` for template repo to make it easier to clone from
+   external templates
+ - Integrate Google Cloud Debugger for Java debugging
+ - Talk to Google about __Google Cloud Shell__ credentials, in particular
+   `/google/credentials/credential_service.py`
+ - Integrate `git commit; git push` into deployment flow
