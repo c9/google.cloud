@@ -54,9 +54,12 @@ define(function(require, exports, module) {
             if (loaded) return;
             loaded = true;
 
-            c9.once("connect", function() {
+            if (c9.connected) {
                 authenticate();
-            }, plugin);
+            }
+            else {
+                c9.once("connect", authenticate, plugin);
+            }
         }
 
         function unload() {
@@ -171,36 +174,6 @@ define(function(require, exports, module) {
                     }
 
                     repo = results && results.repo;
-
-                    if (!repo.googleProject.appEngine.module) {
-                        var error = new Error("App Engine not enabled for Google project. "
-                            + "Go to https://console.developers.google.com/start/appengine?project=_");
-
-                        // FIXME: refactor and move out of core plugin
-                        showConfirm(
-                            "Cloud9 for Google Cloud Platform",
-                            "Enable App Engine to use this project on Cloud9",
-                            "App Engine must be enabled before you can make changes to this project on Cloud9. App Engine lets you build and run your application on Google's global infrastructure so you can focus on your code, not on infrastructure.",
-                            function onConfirm() {
-                                window.open("https://console.developers.google.com/start/appengine?project="
-                                    + encodeURIComponent((repo && repo.googleProject.projectId) || "_"));
-
-                                showConfirm(
-                                    "Cloud9 for Google Cloud Platform",
-                                    "Enable App Engine to use this project on Cloud9",
-                                    "",
-                                    function() {
-                                        window.location.reload();
-                                    }
-                                );
-                            },
-                            function onCancel() {}
-                        );
-
-                        status = STATUS_ERROR;
-                        emit("error", error, plugin);
-                        throw error;
-                    }
 
                     status = STATUS_READY;
                     emit.sticky("ready", {}, plugin);
