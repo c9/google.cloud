@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+"use strict";
+
 process.env["DEBUG_LEVEL"] = process.env["DEBUG_LEVEL"] || "info";
 process.env["DEBUG"] = process.env["DEBUG"] || "*";
 
