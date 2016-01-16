@@ -2,7 +2,7 @@
   "name": "google.cloud",
   "version": "0.0.1-dev",
   "author": [
-      "Cloud9 IDE, Inc."
+    "Cloud9 IDE, Inc."
   ],
   "permissions": "org",
   "private": true,
@@ -12,6 +12,7 @@
   },
   "plugins": {
     "plugin_google.cloud": {},
+    "plugin_google.vfs.credentials": {},
     "plugin_google.menu": {},
     "plugin_google.run": {}
   },
@@ -21,6 +22,12 @@
   "categories": [
     "google"
   ],
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "debug-logger": "^0.4.1",
+    "protobufjs": "^4.1.3"
+  },
+  "devDependencies": {
+    "commander": "^2.9.0"
+  }
 }
-

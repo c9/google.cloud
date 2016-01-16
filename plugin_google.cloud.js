@@ -32,8 +32,9 @@ define(function(require, exports, module) {
          * Local variables
          */
         var loaded;
-        var accessToken;
         var repo;
+        var account;
+        var accessToken;
         var status = STATUS_NEW;
 
         /*
@@ -73,65 +74,6 @@ define(function(require, exports, module) {
          * Methods
          */
 
-        function getAccessToken(callback) {
-            if (accessToken && !accessToken.expires_in) {
-                // workaround for broken expires_in in linkedServices
-                return callback(null, accessToken);
-            }
-
-            linkedServices.getServices(function(err, services) {
-                if (err) {
-                    if (err.code === 0) {
-                        err.code = "EDISCONNECT";
-                    }
-
-                    if (!err.message) {
-                        err.message = "Could not authorize your Google account. Please try reloading your workspace.";
-                    }
-
-                    return callback(err);
-                }
-
-                if (!services.google) {
-                    var error = new Error("No Google account associated with your workspace. Please contact support.");
-                    return callback(error);
-                }
-
-                var account = _.find(services.google.accounts, function(account) {
-                    return _.some(account.projects, { id: c9.projectId });
-                });
-
-                if (!account) {
-                    var error = new Error("This workspace is not linked to a Google account. Please recreate your workspace.");
-                    return callback(error);
-                }
-
-                linkedServices.getAccessToken(account.id, function(err, result) {
-                    if (err) {
-                        if (err.code === 0) {
-                            err.code = "EDISCONNECT";
-                        }
-
-                        if (!err.message) {
-                            err.message = "Could not authorize your Google account. Please try reloading your workspace.";
-                        }
-
-                        return callback(err);
-                    }
-
-                    accessToken = result;
-
-                    if (accessToken && !accessToken.expires_in) {
-                        accessToken.timeout = setTimeout(function() {
-                            accessToken = null;
-                        }, 30 * 60 * 1000);
-                    }
-
-                    callback(null, result);
-                });
-            });
-        }
-
         plugin.on("load", load);
         plugin.on("unload", unload);
 
@@ -166,7 +108,53 @@ define(function(require, exports, module) {
                             next(err, res && res.repo);
                         });
                     }],
+
+                    account: [function(next, ctx) {
+                        linkedServices.getServices(function(err, services) {
+                            if (!services.google) {
+                                var error = new Error("No Google account associated with your workspace. Please contact support.");
+                                return next(error);
+                            }
+
+                            var account = _.find(services.google.accounts, function(account) {
+                                return _.some(account.projects, { id: c9.projectId });
+                            });
+
+                            if (!account) {
+                                var error = new Error("This workspace is not linked to a Google account. Please recreate your workspace.");
+                                return next(error);
+                            }
+
+                            next(null, account);
+                        });
+                    }],
+
+                    accessToken: ["account", function(next, ctx) {
+                        linkedServices.getAccessToken(ctx.account.id, function(err, result) {
+                            //accessToken = result;
+
+                            //if (accessToken && !accessToken.expires_in) {
+                                //accessToken.timeout = setTimeout(function() {
+                                    //accessToken = null;
+                                //}, 30 * 60 * 1000);
+                            //}
+
+                            next(err, result);
+                        });
+                    }],
                 }, function(err, results) {
+                    debug(err, results);
+
+                    if (err) {
+                        if (err.code === 0)
+                            err.code = "EDISCONNECT";
+
+                        if (!err.message)
+                            err.message = "Could not load your Google account. Please try reloading your workspace.";
+
+                        return next(err);
+                    }
+
                     if (err) {
                         status = STATUS_ERROR;
                         emit("error", err, plugin);
@@ -174,6 +162,8 @@ define(function(require, exports, module) {
                     }
 
                     repo = results && results.repo;
+                    account = results && results.account;
+                    accessToken = results && results.accessToken;
 
                     status = STATUS_READY;
                     emit.sticky("ready", {}, plugin);
@@ -239,6 +229,19 @@ define(function(require, exports, module) {
                     "version": integer,
                     "passwordUpdatedAt": double
                 };
+            },
+
+            getCredentials: function(callback) {
+                callback = callback || noop;
+
+                authenticate(function(err) {
+                    if (err) return callback(err);
+                    callback(null, {
+                        "email": account.metadata.email,
+                        "projectId": repo.googleProject.projectId,
+                        "accessToken": accessToken.google_access_token,
+                    });
+                });
             },
 
             getProject: function(callback) {

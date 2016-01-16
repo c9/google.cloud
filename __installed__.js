@@ -5,6 +5,7 @@ define(function(require, exports, module) {
      */
      return [
          "plugins/google.cloud/plugin_google.cloud",
+         "plugins/google.cloud/plugin_google.vfs.credentials",
          "plugins/google.cloud/plugin_google.menu",
          "plugins/google.cloud/plugin_google.run",
      ];
