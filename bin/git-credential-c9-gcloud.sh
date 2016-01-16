@@ -26,8 +26,13 @@ _gcloud_check() {
 }
 
 while ! _gcloud_check; do
-    echo "[git-credential-c9-gcloud] waiting for gcloud credentials... choose Google > initialize workspace" >&2
-    sleep 3
+    WAITED=1
+    echo "[git-credential-c9-gcloud] waiting for credentials" >&2
+    sleep 1
 done
+
+if [[ $WAITED ]]; then
+    echo "[git-credential-c9-gcloud] running git..." >&2
+fi
 
 git-credential-gcloud.sh "$@"

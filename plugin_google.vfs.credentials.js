@@ -252,7 +252,7 @@ define(function(require, exports, module) {
              *   the hostname or IP address that the server is bound to.
              */
             listen: bindRemote("listen", [
-                "port", "host", "callback"
+                "callback"
             ]),
 
             /**
