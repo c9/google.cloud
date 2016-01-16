@@ -2,12 +2,12 @@
     "info" : "Running mvn gcloud:deploy...",
     "cmd" : [
       "mvn",
-      "gcloud:deploy",
-      "-Dgcloud.gcloud_directory=/usr/local/share/google/google-cloud-sdk"
+      "--threads=4", "-DskipTests=true", "-DskipTests=true", "-Dmaven.test.skip=true", "-Darguments=-DskipTests", "-Doverride.build.directory=target-deploy",
+      "clean", "gcloud:deploy", "clean"
     ],
     "working_dir": "$project_path",
     "env" : {
-      "JAVA_HOME": "/usr/lib/jvm/java-8-oracle"
-    },
-    "selector" : "source.java"
+      "JAVA_HOME": "/usr/lib/jvm/java-8-oracle",
+      "MAVEN_OPTS": "'-Xms32m'"
+    }
 }

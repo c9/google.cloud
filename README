@@ -40,3 +40,21 @@ Pending
  - Talk to Google about __Google Cloud Shell__ credentials, in particular
    `/google/credentials/credential_service.py`
  - Integrate `git commit; git push` into deployment flow
+
+```
+mvn help:describe -Dplugin=com.google.appengine:gcloud-maven-plugin
+mvn help:describe -Dplugin=com.google.appengine:gcloud-maven-plugin -Ddetail=true
+mvn help:describe -Dcmd=gcloud:run -Ddetail
+mvn help:describe -Dcmd=package -Ddetail
+mvn help:describe -Dplugin=war -Ddetail
+mvn versions:display-plugin-updates
+mvn versions:display-dependency-updates
+less /usr/local/share/google/google-cloud-sdk/platform/google_appengine/google/appengine/tools/devappserver2/java_runtime.py 
+```
+
+Java Optimizations
+------------------
+
+ - http://zeroturnaround.com/rebellabs/your-maven-build-is-slow-speed-it-up/
+ - http://www.scmtechblog.net/2015/06/maven-tips-to-optimize-build-timings.html
+ - https://github.com/jruby/jruby/wiki/Improving-startup-time
