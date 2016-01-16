@@ -43,16 +43,16 @@ define(function(require, exports, module) {
             if (loaded) return;
             loaded = true;
 
-            run.addRunner("Google: mvn gcloud:run",
+            run.addRunner("Java Managed VM: mvn gcloud:run",
                 JSON.parse(require("text!./runners/mvn_gcloud_run.run")),
                 plugin);
 
-            run.addRunner("Google: mvn gcloud:deploy",
-                JSON.parse(require("text!./runners/mvn_gcloud_deploy.run")),
+            run.addRunner("Java Managed VM: mvn gcloud:run (watch)",
+                JSON.parse(require("text!./runners/mvn_gcloud_watch.run")),
                 plugin);
 
-            build.addBuilder("Google: mvn install",
-                JSON.parse(require("text!./builders/mvn_install.build")),
+            run.addRunner("Java Managed VM: mvn gcloud:deploy",
+                JSON.parse(require("text!./runners/mvn_gcloud_deploy.run")),
                 plugin);
         }
 
@@ -124,10 +124,26 @@ define(function(require, exports, module) {
                     document: {output: {id: "google_run_run"}}
                 }, function() {});
 
-                run.getRunner("Google: mvn gcloud:run", false, function(err, runner) {
+                run.getRunner("Java Managed VM: mvn gcloud:run", false, function(err, runner) {
                     if (err) throw err;
                     var process = run.run(runner, {
                     }, "google_run_run", function(err, pid) {
+                        if (err) throw err;
+                    });
+                });
+            },
+
+            watch: function() {
+                tabManager.open({
+                    editorType: "output", 
+                    active: true,
+                    document: {output: {id: "google_run_watch"}}
+                }, function() {});
+
+                run.getRunner("Java Managed VM: mvn gcloud:run (watch)", false, function(err, runner) {
+                    if (err) throw err;
+                    var process = run.run(runner, {
+                    }, "google_run_watch", function(err, pid) {
                         if (err) throw err;
                     });
                 });
@@ -140,7 +156,7 @@ define(function(require, exports, module) {
                     document: {output: {id: "google_run_deploy"}}
                 }, function() {});
 
-                run.getRunner("Google: mvn gcloud:deploy", false, function(err, runner) {
+                run.getRunner("Java Managed VM: mvn gcloud:deploy", false, function(err, runner) {
                     if (err) throw err;
                     var process = run.run(runner, {
                     }, "google_run_deploy", function(err, pid) {

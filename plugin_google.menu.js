@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
     main.consumes = [
-        "Plugin", "menus", "ui", "c9", 
+        "Plugin", "menus", "ui", "c9", "layout", 
         "google.cloud", "google.run",
     ];
     main.provides = ["google.menu"];
@@ -14,6 +14,7 @@ define(function(require, exports, module) {
         var menus = imports["menus"];
         var ui = imports["ui"];
         var c9 = imports["c9"];
+        var layout = imports["layout"];
         var googlecloud = imports["google.cloud"];
         var googlerun = imports["google.run"];
 
@@ -104,6 +105,114 @@ define(function(require, exports, module) {
                 buttonMenu.setCaption("Google: Connection Failed");
                 buttonMenu.$html.style = "background-color: #E73B3B; color: #fff;";
             });
+
+            // initialize preview/run buttons
+
+            var canRun = false;
+            var canDeploy = false;
+
+            canRun = canDeploy = true;
+
+            var menuBarTools = layout.findParent({name: "run.gui"});
+
+            var buttonRun, submenuRun, msgRun1, msgRun2, msgRun3;
+            submenuRun = new ui.menu({
+                "onprop.visible": function(e) {
+                    msgRun1.setAttribute("visible", !canRun);
+                    msgRun2.setAttribute("visible", !canRun);
+                    msgRun3.setAttribute("visible", !canRun);
+                }
+            });
+            menus.addItemByPath("Google/Run/", submenuRun, 1000, plugin);
+            menus.addItemByPath("Google/Run/NotAvailable1", msgRun1 = new ui.item({
+                disabled: true,
+            }), 101, plugin);
+            menus.addItemByPath("Google/Run/NotAvailable2", msgRun2 = new ui.item({
+                disabled: true,
+            }), 102, plugin);
+            menus.addItemByPath("Google/Run/NotAvailable3", msgRun3 = new ui.item({
+                disabled: true,
+            }), 103, plugin);
+            msgRun1.setAttribute("caption", "Oops! Your type of project is not yet supported by Cloud9 for Google Cloud Platform.");
+            msgRun2.setAttribute("caption", "Try out the example projects that use Java on App Engine Managed VMs");
+            msgRun3.setAttribute("caption", "or run 'dev_appserver.py' manually in the terminal.");
+            buttonRun = ui.insertByIndex(menuBarTools, new ui.button({
+                id: "googleBtnRun",
+                skin: "c9-toolbarbutton-glossy",
+                caption: "Run",
+                //disabled: true,
+                class: "google runbtn stopped",
+                icon: "run.png",
+                submenu: submenuRun,
+                onclick: function(e) {
+                    if (canRun) {
+                        googlerun.watch();
+                    }
+                },
+                onmouseover: function(e) {
+                    if (!canRun) {
+                        this.showMenu();
+                        this.setValue(true);
+                    }
+                },
+                onmouseout: function(e) {
+                    if (!canRun) {
+                        this.hideMenu();
+                        this.setValue(false);
+                        return false;
+                    }
+                },
+            }), 200, plugin);
+
+            var buttonDeploy, submenuDeploy, msgDeploy1, msgDeploy2, msgDeploy3;
+            submenuDeploy = new ui.menu({
+                "onprop.visible": function(e) {
+                    msgDeploy1.setAttribute("visible", !canDeploy);
+                    msgDeploy2.setAttribute("visible", !canDeploy);
+                    msgDeploy3.setAttribute("visible", !canDeploy);
+                }
+            });
+            menus.addItemByPath("Google/Deploy/", submenuDeploy, 1000, plugin);
+            menus.addItemByPath("Google/Deploy/NotAvailable1", msgDeploy1 = new ui.item({
+                disabled: true,
+            }), 101, plugin);
+            menus.addItemByPath("Google/Deploy/NotAvailable2", msgDeploy2 = new ui.item({
+                disabled: true,
+            }), 102, plugin);
+            menus.addItemByPath("Google/Deploy/NotAvailable3", msgDeploy3 = new ui.item({
+                disabled: true,
+            }), 103, plugin);
+            msgDeploy1.setAttribute("caption", "Oops! Your type of project is not yet supported by Cloud9 for Google Cloud Platform.");
+            msgDeploy2.setAttribute("caption", "Try out the example projects that use Java on App Engine Managed VMs");
+            msgDeploy3.setAttribute("caption", "or run 'gcloud' manually in the terminal.");
+            buttonDeploy = ui.insertByIndex(menuBarTools, new ui.button({
+                id: "googleBtnDeploy",
+                skin: "c9-toolbarbutton-glossy",
+                caption: "Deploy",
+                //disabled: true,
+                class: "google deploybtn stopped",
+                submenu: submenuDeploy,
+                onclick: function(e) {
+                    if (canDeploy) {
+                        googlerun.deploy();
+                    }
+                },
+                onmouseover: function(e) {
+                    if (!canDeploy) {
+                        this.showMenu();
+                        this.setValue(true);
+                    }
+                },
+                onmouseout: function(e) {
+                    if (!canDeploy) {
+                        this.hideMenu();
+                        this.setValue(false);
+                        return false;
+                    }
+                },
+            }), 300, plugin);
+
+            //debugger;
         }
 
         function unload() {
