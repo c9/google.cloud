@@ -1,9 +1,11 @@
 {
     "info" : "Running mvn gcloud:deploy...",
     "cmd" : [
-      "mvn",
-      "--threads=4", "-DskipTests=true", "-DskipTests=true", "-Dmaven.test.skip=true", "-Darguments=-DskipTests", "-Doverride.build.directory=target-deploy",
-      "clean", "gcloud:deploy", "clean"
+      "mvn-c9.sh",
+      "--threads=4", "-DskipTests=true", "-DskipTests=true", "-Dmaven.test.skip=true", "-Darguments='-DskipTests'", "-Doverride.build.directory=target-deploy",
+      "clean",
+      "com.google.appengine:gcloud-maven-plugin::deploy", "-Dgcloud.set_default=true",
+      "clean"
     ],
     "working_dir": "$project_path",
     "env" : {

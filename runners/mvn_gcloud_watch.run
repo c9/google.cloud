@@ -1,9 +1,11 @@
 {
     "info" : "Running mvn gcloud:run and watching for changes...",
     "cmd" : [
-      "mvn",
-      "--threads=4", "-DskipTests=true", "-DskipTests=true", "-Dmaven.test.skip=true", "-Darguments=-DskipTests", "-Dgcloud.host=$IP:$PORT",
-      "clean", "gcloud:run_start", "fizzed-watcher:run"
+      "mvn-c9.sh",
+      "--threads=4", "-DskipTests=true", "-DskipTests=true", "-Dmaven.test.skip=true", "-Darguments='-DskipTests'",
+      "clean",
+      "com.google.appengine:gcloud-maven-plugin::run_start", "-Dgcloud.host=$IP:$PORT",
+      "com.fizzed:fizzed-watcher-maven-plugin:1.0.6:run", "-DskipTouch=true", "-Dgoals=compile,war:exploded"
     ],
     "working_dir": "$project_path",
     "env" : {
