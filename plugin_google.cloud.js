@@ -152,10 +152,6 @@ define(function(require, exports, module) {
                         if (!err.message)
                             err.message = "Could not load your Google account. Please try reloading your workspace.";
 
-                        return next(err);
-                    }
-
-                    if (err) {
                         status = STATUS_ERROR;
                         emit("error", err, plugin);
                         throw err;
