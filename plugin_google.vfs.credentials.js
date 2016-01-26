@@ -35,13 +35,15 @@ define(function(require, exports, module) {
 
         function load() {
             if (c9.connected) {
-                plugin.loadVfsExtension(function() {
+                plugin.loadVfsExtension(function(err) {
+                    if (err) console.error(err.stack || err);
                     plugin.loadCredentials();
                 });
             }
 
             c9.on("connect", function() {
-                plugin.loadVfsExtension(function() {
+                plugin.loadVfsExtension(function(err) {
+                    if (err) console.error(err.stack || err);
                     plugin.loadCredentials();
                 });
             }, plugin);

@@ -1,7 +1,12 @@
 module.exports = function(vfs, options, register) {
     function noop() {}
 
-    var CredentialServer = require(options.packageDir + "/lib/CredentialServer");
+    try {
+        var CredentialServer = require(options.packageDir + "/lib/CredentialServer");
+    }
+    catch (e) {
+        return register(e);
+    }
 
     var app = new CredentialServer();
     var server;
