@@ -10,6 +10,6 @@
     "working_dir": "$project_path",
     "env" : {
       "JAVA_HOME": "/usr/lib/jvm/java-8-oracle",
-      "MAVEN_OPTS": "'-Xms32m'"
+      "MAVEN_OPTS": "-XX:MaxNewSize=64m -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -XX:+CMSParallelRemarkEnabled -XX:+UseTLAB -XX:ParallelGCThreads=6"
     }
 }

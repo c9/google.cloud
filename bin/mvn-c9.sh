@@ -95,7 +95,9 @@ _check_git() {
         ask_clone "workspace not ready: not a git repository"
     fi
 
-    if [[ "$(git ls-files)" == "" && "$(git ls-files --others --exclude-standard)" == "" ]]; then
+    if [[ "$(git ls-files --others --exclude-standard)" == "" ]] &&
+        [[ "$(git ls-files)" == "" || $(git ls-files | sort | tr $'\n' -) =~ ^(.gitignore-)?(LICENSE-)?(README-)?$ ]]
+    then
         ask_clone "workspace not ready: empty file tree"
     fi
 }
