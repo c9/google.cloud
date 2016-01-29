@@ -54,6 +54,10 @@ define(function(require, exports, module) {
             run.addRunner("Java Managed VM: mvn gcloud:deploy",
                 JSON.parse(require("text!./runners/mvn_gcloud_deploy.run")),
                 plugin);
+
+            run.addRunner("Java Managed VM: foo bar: long text: cloud: this needs to look like java:run",
+                JSON.parse(require("text!./runners/cloud_debugger.run")),
+                plugin);
         }
 
         function unload() {

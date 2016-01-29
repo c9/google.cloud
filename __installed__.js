@@ -9,5 +9,6 @@ define(function(require, exports, module) {
          "plugins/google.cloud/plugin_google.menu",
          "plugins/google.cloud/plugin_google.run",
          "plugins/google.cloud/plugin_google.welcome",
+         "plugins/google.cloud/cloud_debugger",
      ];
 });

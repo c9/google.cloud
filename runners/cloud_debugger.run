@@ -1,0 +1,7 @@
+{
+    "cmd" : ["sleep", "10000"],
+    "info" : "Started remote debugger",
+    "env" : {},
+    "selector" : "source.java",
+    "debugger": "googleCloudDebugger"
+}
