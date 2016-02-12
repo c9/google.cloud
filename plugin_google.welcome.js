@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                     editorType: "preview",
                     active: true,
                     document: {
-                        preview: { path: "https://docs.c9.io/v1.0/docs/google" }
+                        preview: { path: "https://docs.c9.io/v1.0/docs/google", trusted: true  }
                     }
                 });
             });
