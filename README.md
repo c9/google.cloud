@@ -11,15 +11,14 @@ Platform.
  - **lib/PBLiteStreamReader.js** and **lib/PBLiteStreamWriter.js**: Stream
    classes that read and write Google Protocol Buffer 2 messages in the PB-Lite
    (JSON) format and transforms them into `protobuf.js` message objects.
- - `git-credential-c9-gcloud.sh` helper to wait for CredentialServer and block
-   git commands until ready.
+ - **bin/git-credential-c9-gcloud.sh**: helper to wait for CredentialServer and
+   block git commands until ready.
 
-For information about Cloud9 for Google Cloud Platform, see
-https://docs.c9.io/docs/google
+For user documentation, see https://docs.c9.io/docs/google
 
 ## Known Issues
 
- - The output window for __deploy__ has no stop button and its output can
+ - The output window for _deploy_ has no stop button and its output can
    become detached.
  - Attempting to deploy a new project can lead to an error if the project is
    not connected to a Billing Account. This error message is combined with
