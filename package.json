@@ -22,7 +22,7 @@
   "categories": [
     "google"
   ],
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "debug-logger": "^0.4.1",
     "protobufjs": "^4.1.3"
