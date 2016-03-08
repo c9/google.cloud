@@ -23,7 +23,7 @@ define(function(require, exports, module) {
         var Plugin = imports["Plugin"];
         var settings = imports.settings;
         var tabs = imports.tabManager;
-        var plugin = new Plugin("Cloud9 IDE, Inc.", main.consumes);
+        var plugin = new Plugin("Cloud9", main.consumes);
 
         function load() {
             tabs.once("ready", function() {

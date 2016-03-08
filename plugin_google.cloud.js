@@ -21,9 +21,10 @@ define(function(require, exports, module) {
     return main;
 
     function main(options, imports, register) {
-        /*
-         * Imports
-         */
+        //
+        // Imports
+        //
+
         var Plugin = imports["Plugin"];
         var showError = imports["dialog.error"].show;
         var showConfirm = imports["dialog.confirm"].show;
@@ -34,27 +35,29 @@ define(function(require, exports, module) {
         var _ = require("lodash");
         var async = require("async");
 
-        /*
-         * Constants
-         */
+        //
+        // Constants
+        //
+
         var STATUS_NEW = "new";
         var STATUS_LOADING = "loading";
         var STATUS_READY = "ready";
         var STATUS_ERROR = "error";
 
-        /*
-         * Local variables
-         */
-        var loaded;
+        //
+        // Local variables
+        //
+
         var repo;
         var account;
         var accessToken;
         var status = STATUS_NEW;
 
-        /*
-         * Plugin declaration
-         */
-        var plugin = new Plugin("Cloud9 IDE, Inc.", main.consumes);
+        //
+        // Plugin declaration
+        //
+
+        var plugin = new Plugin("Cloud9", main.consumes);
         var emit = plugin.getEmitter();
 
         function debug() {
@@ -66,9 +69,6 @@ define(function(require, exports, module) {
         }
 
         function load() {
-            if (loaded) return;
-            loaded = true;
-
             if (c9.connected) {
                 authenticate();
             }
@@ -78,20 +78,18 @@ define(function(require, exports, module) {
         }
 
         function unload() {
-            loaded = false;
-            accessToken = null;
             repo = null;
+            account = null;
+            accessToken = null;
             status = STATUS_NEW;
         }
-
-        /*
-         * Methods
-         */
 
         plugin.on("load", load);
         plugin.on("unload", unload);
 
-        // --
+        //
+        // Helpers
+        //
 
         function authenticate(callback) {
             callback = callback || noop;
@@ -119,7 +117,14 @@ define(function(require, exports, module) {
                         api.user.get("services/repo", {
                             query: {url: ctx.project.scmurl},
                         }, function(err, res) {
-                            next(err, res && res.repo);
+                            if (err) return next(err);
+
+                            if (!res || !res.repo || !res.repo.googleProject) {
+                                var error = new Error("Could not fetch Google Cloud repository configuration. Please contact support.");
+                                return next(error);
+                            }
+
+                            next(null, res.repo);
                         });
                     }],
 
@@ -185,7 +190,9 @@ define(function(require, exports, module) {
             });
         }
 
-        // --
+        //
+        // Public API declaration
+        //
 
         /**
          * Access information about the Google Cloud Platform project linked to
@@ -208,10 +215,6 @@ define(function(require, exports, module) {
             },
 
             authenticate: function(callback) {
-                //getAccessToken(function(err, accessToken) {
-                    //debugger;
-                //});
-
                 callback = callback || noop;
 
                 authenticate(function(err) {
@@ -255,16 +258,6 @@ define(function(require, exports, module) {
             },
 
             getProject: function(callback) {
-                // https://api.c9.dev/projects/43?access_token=9co8nuZ59L5mCHsKNVai
-                //
-                //   -> .scmurl
-                //
-                // https://api.c9.dev/user/services/repo
-                //   ?access_token=9co8nuZ59L5mCHsKNVai
-                //   &url=https://source.developers.google.com/p/silver-treat-115214/r/default
-                //
-                // https://api.c9.dev/projects/44/services/google%3A105925089449909636016/token?access_token=9co8nuZ59L5mCHsKNVai
-
                 async.auto({
                     project: [function(next, ctx) {
                         api.project.get("", function(err, res) {
@@ -280,14 +273,9 @@ define(function(require, exports, module) {
                         });
                     }],
                 }, function(err, results) {
-                    debugger;
+                    if (err) return callback(err);
+                    callback(null, results);
                 });
-
-                //return {
-                    //"projectNumber": string,
-                    //"projectId": string,
-                    //"name": string,
-                //};
             },
 
             /**

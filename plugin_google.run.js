@@ -21,9 +21,10 @@ define(function(require, exports, module) {
     return main;
 
     function main(options, imports, register) {
-        /*
-         * Imports
-         */
+        //
+        // Imports
+        //
+
         var Plugin = imports["Plugin"];
         var c9 = imports["c9"];
         var run = imports["run"];
@@ -32,17 +33,10 @@ define(function(require, exports, module) {
         var util = imports["util"];
         var googlecloud = imports["google.cloud"];
 
-        var _ = require("lodash");
-        var async = require("async");
+        //
+        // Plugin declaration
+        //
 
-        /*
-         * Local variables
-         */
-        var loaded;
-
-        /*
-         * Plugin declaration
-         */
         var plugin = new Plugin("Cloud9 IDE, Inc.", main.consumes);
 
         function debug() {
@@ -54,9 +48,6 @@ define(function(require, exports, module) {
         }
 
         function load() {
-            if (loaded) return;
-            loaded = true;
-
             run.addRunner("Java Managed VM: mvn gcloud:run",
                 JSON.parse(require("text!./runners/mvn_gcloud_run.run")),
                 plugin);
@@ -71,43 +62,19 @@ define(function(require, exports, module) {
         }
 
         function unload() {
-            loaded = false;
         }
 
         plugin.on("load", load);
         plugin.on("unload", unload);
 
+        //
+        // Public API declaration
+        //
+
         /**
          * Helper methods for runners on `gcloud` workspaces.
          */
         plugin.freezePublicAPI({
-            /**
-             * Authenticate and configure the `gcloud` utility
-             */
-            init: function(accountEmail) {
-                accountEmail = accountEmail || "alex+google1@c9_io";
-
-                googlecloud.getProjectId(function(err, projectId) {
-                    tabManager.open({
-                        editorType: "output", 
-                        active: true,
-                        document: {output: {id: "google_run_init"}}
-                    }, function() {});
-
-                    var process = run.run({
-                        "cmd": [
-                            "bash", "--login", "-c",
-                            "gcloud config set project " + util.escapeShell(projectId) + " "
-                                + "&& gcloud auth login"
-                        ],
-                        "info": "[alpha workaround] Initializing gcloud credentials...",
-                        "working_dir": "$project_path",
-                    }, {}, "google_run_init", function(err, pid) {
-                        if (err) throw err;
-                    });
-                });
-            },
-
             /**
              * Pull a project template into the workspace by running `git pull ...`
              */

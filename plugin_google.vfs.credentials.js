@@ -43,6 +43,10 @@ define(function(require, exports, module) {
         var plugin = new Plugin("Cloud9", main.consumes);
         var emit = plugin.getEmitter();
 
+        function debug() {
+            if (1 || c9.debug) console.info.apply(console, arguments);
+        }
+
         function noop() {
             if (1 || c9.debug) console.info.apply(console, arguments);
         }

@@ -1,25 +1,23 @@
 {
   "name": "google.cloud",
-  "version": "0.0.1-dev",
+  "version": "1.0.0",
   "author": [
-    "Cloud9 IDE, Inc."
+    "Cloud9 IDE, Inc. (https://c9.io)"
   ],
-  "permissions": "org",
   "private": true,
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:c9/google.cloud.git"
-  },
+  "repository": "github:c9/google.cloud",
   "plugins": {
     "plugin_google.cloud": {},
     "plugin_google.vfs.credentials": {},
     "plugin_google.menu": {},
-    "plugin_google.run": {}
+    "plugin_google.run": {},
+    "plugin_google.welcome": {}
   },
   "engines": {
     "c9": ">=3.1.527"
   },
   "categories": [
+    "cloud9",
     "google"
   ],
   "license": "Apache-2.0",
