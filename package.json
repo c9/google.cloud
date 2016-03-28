@@ -20,7 +20,7 @@
     "cloud9",
     "google"
   ],
-  "license": "Apache-2.0",
+  "license": "MIT",
   "dependencies": {
     "debug-logger": "^0.4.1",
     "protobufjs": "^4.1.3"
