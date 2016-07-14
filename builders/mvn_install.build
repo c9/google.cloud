@@ -1,7 +1,7 @@
 {
     "cmd" : ["mvn", "install"],
     "env" : {
-      "JAVA_HOME": "/usr/lib/jvm/java-8-oracle"
+      "JAVA_HOME": "/usr/lib/jvm/default-java"
     },
     "working_dir": "$project_path",
     "info" : "Running mvn install...",
