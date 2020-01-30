@@ -23,7 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "debug-logger": "^0.4.1",
-    "protobufjs": "^4.1.3"
+    "protobufjs": "^6.8.8"
   },
   "devDependencies": {
     "commander": "^2.9.0"
